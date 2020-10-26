@@ -24,6 +24,7 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.buckets = [None] * self.capacity
+        self.num_of_items = 0
 
 
     def get_num_slots(self):
@@ -47,7 +48,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        print(f"# of items in hash table: ", len(self.hash_table))
+        load_factor = self.num_of_items / len(self.buckets)
+        return load_factor
 
 
     def fnv1(self, key):
@@ -94,6 +96,7 @@ class HashTable:
         index = self.hash_index(key)
         #print("index in put: ", index)
         self.buckets[index] = value
+        self.num_of_items += 1
 
 
     def delete(self, key):
@@ -107,6 +110,7 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
         self.buckets[index] = None
+        self.num_of_items -= 1
 
 
     def get(self, key):
@@ -138,6 +142,7 @@ if __name__ == "__main__":
 
     ht.put("david", "software engineer")
     print("---->", ht.get("david"))
+    print("load factor: ", ht.get_load_factor())
 
 
 
