@@ -22,6 +22,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+        self.buckets = [None] * self.capacity
 
 
     def get_num_slots(self):
@@ -61,11 +63,16 @@ class HashTable:
         DJB2 hash, 32-bit
 
         Implement this, and/or FNV-1.
+        adapted from https://gist.github.com/mengzhuo/180cd6be8ba9e2743753 (typed out; not copied and pasted)
         """
         # Your code here
+        hash = 5381
+        for x in key:
+            hash = ((hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFF
 
 
-    def hash_index(self, key):
+    def hash_index(self, key):#only takes in strings; no numbers
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
@@ -82,6 +89,9 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        #print("index in put: ", index)
+        self.buckets[index] = value
 
 
     def delete(self, key):
@@ -93,6 +103,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        self.buckets[index] = None
 
 
     def get(self, key):
@@ -104,6 +116,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        return self.buckets[index]
 
 
     def resize(self, new_capacity):
