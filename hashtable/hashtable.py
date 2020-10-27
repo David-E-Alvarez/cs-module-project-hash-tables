@@ -139,8 +139,24 @@ class HashTable:
 
     def delete(self, key):
         index = self.hash_index(key)
-        self.buckets[index].value = None
-        self.num_of_items -= 1
+        prev = self.buckets[index]
+        cur = self.buckets[index].next
+
+        if prev.key == key:
+            self.buckets[index] = cur
+            prev.next = None
+            return prev.value
+        
+        while cur is not None:
+            if cur.key == key:
+                prev.next = cur.next
+                self.num_of_items -= 1
+                return cur
+            else:
+                prev = prev.next
+                cur = cur.next
+        
+        return None
 
 
 
@@ -166,8 +182,8 @@ if __name__ == "__main__":
 
     print('---->',ht.get("lambda"))
     print(ht.buckets)
-    #ht.delete("lambda")
-    #print(ht.buckets)
+    ht.delete("lambda")
+    print(ht.buckets)
     
     # ht.put("line_1", "'Twas brillig, and the slithy toves")
     # ht.put("line_2", "Did gyre and gimble in the wabe:")
