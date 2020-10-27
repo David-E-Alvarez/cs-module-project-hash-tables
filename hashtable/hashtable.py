@@ -1,4 +1,4 @@
-class HashTableEntry:
+class HashTableEntry:#"node" class equivalent
     """
     Linked List hash table key/value pair
     """
@@ -7,6 +7,33 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    # def __repr__(self):
+    #     return f'HashTableEntry(key: {repr(self.key)}, value: {repr(self.value)})'
+
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def __str__(self):
+        """print entire linked list"""
+        if self.head is None:
+            return "[Empty List]"
+        cur = self.head
+        s = ""
+
+        while cur != None:
+            s += f'({cur.value})'
+            #print("s: ", s)
+            if cur.next is not None:
+                s += '-->'
+            cur = cur.next
+
+        return s
+
+    def insert_at_head(self,node):
+        node.next = self.head
+        self.head = node
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
@@ -84,53 +111,41 @@ class HashTable:
         #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
+    #get, put, and delete using hashtableentry
     def put(self, key, value):
-        """
-        Store the value with the given key.
-
-        Hash collisions should be handled with Linked List Chaining.
-
-        Implement this.
-        """
-        # Your code here
+        #ll = LinkedList()
+        #1.)get index
         index = self.hash_index(key)
-        #print("index in put: ", index)
-        self.buckets[index] = value
-        self.num_of_items += 1
-
-
-    def delete(self, key):
-        """
-        Remove the value stored with the given key.
-
-        Print a warning if the key is not found.
-
-        Implement this.
-        """
-        # Your code here
-        index = self.hash_index(key)
-        self.buckets[index] = None
-        self.num_of_items -= 1
-
+        cur = self.buckets[index] 
+        #2.) check to see if place you want to put value at in hash table is taken
+        if cur is not None and cur.key != key:
+            cur = cur.next
+        if cur is not None:
+            cur.value = value
+        else:
+            hte = HashTableEntry(key,value)#like node
+            hte.next = self.buckets[index]
+            self.buckets[index] = hte 
+            self.num_of_items += 1
 
     def get(self, key):
-        """
-        Retrieve the value stored with the given key.
-
-        Returns None if the key is not found.
-
-        Implement this.
-        """
-        # Your code here
         index = self.hash_index(key)
-        return self.buckets[index]
+        return self.buckets[index].value
+
+    def delete(self, key):
+        index = self.hash_index(key)
+        self.buckets[index].value = None
+
+
 
 
     def resize(self, new_capacity):
         """
         Changes the capacity of the hash table and
         rehashes all key/value pairs.
-
+        note: common to double size of hash table
+        # when resizing items need to be re-inserted rather than just copied because items have to be re-run through
+        # hashing function because hashing function takes into account the size of hash table when determining index it returns
         Implement this.
         """
         # Your code here
@@ -140,12 +155,13 @@ class HashTable:
 if __name__ == "__main__":
     ht = HashTable(8)
 
-    ht.put("david", "software engineer")
-    print("---->", ht.get("david"))
-    print("load factor: ", ht.get_load_factor())
+    ht.put("lambda", "school")
 
-
-
+    print('---->',ht.get("lambda"))
+    print(ht.buckets)
+    ht.delete("lambda")
+    print(ht.buckets)
+    
     # ht.put("line_1", "'Twas brillig, and the slithy toves")
     # ht.put("line_2", "Did gyre and gimble in the wabe:")
     # ht.put("line_3", "All mimsy were the borogoves,")
@@ -170,10 +186,52 @@ if __name__ == "__main__":
     ht.resize(ht.capacity * 2)
     new_capacity = ht.get_num_slots()
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    #print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # Test if data intact after resizing
     # for i in range(1, 13):
     #     print(ht.get(f"line_{i}"))
 
     print("")
+
+
+# def put(self, key, value):
+#         """
+#         Store the value with the given key.
+
+#         Hash collisions should be handled with Linked List Chaining.
+
+#         Implement this.
+#         """
+#         # Your code here
+#         index = self.hash_index(key)
+#         #print("index in put: ", index)
+#         self.buckets[index] = value
+#         self.num_of_items += 1
+
+
+#     def delete(self, key):
+#         """
+#         Remove the value stored with the given key.
+
+#         Print a warning if the key is not found.
+
+#         Implement this.
+#         """
+#         # Your code here
+#         index = self.hash_index(key)
+#         self.buckets[index] = None
+#         self.num_of_items -= 1
+
+
+#     def get(self, key):
+#         """
+#         Retrieve the value stored with the given key.
+
+#         Returns None if the key is not found.
+
+#         Implement this.
+#         """
+#         # Your code here
+#         index = self.hash_index(key)
+#         return self.buckets[index]
