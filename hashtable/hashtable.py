@@ -130,11 +130,17 @@ class HashTable:
 
     def get(self, key):
         index = self.hash_index(key)
-        return self.buckets[index].value
+        cur = self.buckets[index]
+        while cur != None:
+            if cur.key == key:
+                return cur.value
+            cur = cur.next
+        return None
 
     def delete(self, key):
         index = self.hash_index(key)
         self.buckets[index].value = None
+        self.num_of_items -= 1
 
 
 
@@ -149,6 +155,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        
 
 
 
@@ -159,8 +166,8 @@ if __name__ == "__main__":
 
     print('---->',ht.get("lambda"))
     print(ht.buckets)
-    ht.delete("lambda")
-    print(ht.buckets)
+    #ht.delete("lambda")
+    #print(ht.buckets)
     
     # ht.put("line_1", "'Twas brillig, and the slithy toves")
     # ht.put("line_2", "Did gyre and gimble in the wabe:")
