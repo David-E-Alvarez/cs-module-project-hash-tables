@@ -127,6 +127,9 @@ class HashTable:
             hte.next = self.buckets[index]
             self.buckets[index] = hte 
             self.num_of_items += 1
+            if self.get_load_factor() > .7:
+                #resize
+                self.resize(self.capacity * 2)
 
     def get(self, key):
         index = self.hash_index(key)
@@ -171,6 +174,10 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        newHashTable = HashTable(new_capacity)
+        
+
+        
         
 
 
@@ -182,7 +189,7 @@ if __name__ == "__main__":
 
     print('---->',ht.get("lambda"))
     print(ht.buckets)
-    ht.delete("lambda")
+    #ht.delete("lambda")
     print(ht.buckets)
     
     # ht.put("line_1", "'Twas brillig, and the slithy toves")
