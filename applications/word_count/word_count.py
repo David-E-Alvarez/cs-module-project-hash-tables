@@ -1,6 +1,9 @@
+cache = {}
+
 def word_count(s):
     # Your code here
-
+    for char in s:
+        print("char: ", char)
 
 
 if __name__ == "__main__":
