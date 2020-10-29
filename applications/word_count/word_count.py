@@ -3,9 +3,9 @@ clean_arr = []
 
 def word_count(s):
     # Your code here
+    lower_s = s.lower()
     chars = set('":;,.-+=/\|[]{}()*^&')
-    word = "a*b^c"
-    s_arr = s.split()
+    s_arr = lower_s.split()
     for word in s_arr:
         #print("word: ", word)
         result = ""
@@ -15,7 +15,13 @@ def word_count(s):
                 result += char
         #print("result: ", result)
         clean_arr.append(result)
-    return clean_arr
+    
+    for word in clean_arr:
+        if word not in ht:
+            ht[word] = 0
+        ht[word] += 1
+
+    return ht
 
 
 
